@@ -1,6 +1,27 @@
-# README for Exploratory Data Analysis and Feature Engineering Project
+# Data Analysis Report on Credit Transactions
+
 ## Overview
-This project focuses on performing Exploratory Data Analysis (EDA) and Feature Engineering on a dataset, with the ultimate goal of building a predictive model for credit scoring. The analysis includes understanding the dataset's structure, identifying patterns, and preparing features for modeling.
+This project provides a comprehensive analysis of credit transaction data. The primary objective is to explore the dataset, assess data quality, and prepare the data for further analysis, identifying trends, patterns, and anomalies within the data.
+
+## Table of Contents
+- [Introduction](#introduction)
+- [Data Overview](#data-overview)
+- [Data Quality Assessment](#data-quality-assessment)
+- [Summary Statistics](#summary-statistics)
+- [Exploratory Data Analysis](#exploratory-data-analysis)
+- [Data Cleaning Process](#data-cleaning-process)
+- [Conclusion](#conclusion)
+- [Future Work](#future-work)
+- [Installation](#installation)
+- [Usage](#usage)
+- [License](#license)
+
+## Introduction
+This report analyzes credit transaction data obtained from [source]. It aims to understand the dataset's structure and integrity while preparing it for further analysis.
+
+## Data Overview
+The dataset consists of 95,662 entries and 18 columns, containing various attributes of credit transactions.
+
 ## Table of Contents
 1. [Project Structure](#Project-Structure)
 2. [Exploratory Data Analysis (EDA)](#Exploratory-Data-Analysis-EDA)
