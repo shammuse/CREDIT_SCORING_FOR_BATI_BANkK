@@ -88,10 +88,13 @@ def load_model():
             model = pickle.load(f)
         
         # Ensure the loaded object is a valid model
+        if model is None:
+            raise ValueError("The loaded model is None.")
+        
         if not hasattr(model, 'predict'):
             raise ValueError("The loaded object is not a valid model with a 'predict' method.")
         
-        print("Model loaded successfully.")
+        print(f"Model loaded successfully. Model type: {type(model)}")
         return model
 
     except FileNotFoundError as fnf_error:
@@ -110,6 +113,7 @@ def load_model():
 def main():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     model_path = os.path.join(current_dir, 'model', 'best_model.pkl')
+    
     # Example input CSV file (replace with your actual data source)
     input_csv = "../data/data.csv"  # Replace with the path to your CSV file
     output_csv = "../data/preprocessed_data.csv"  # File to save preprocessed data
@@ -134,9 +138,7 @@ def main():
         print(f"Model path: {model_path}")
 
         model = load_model()
-        print(f"Model loaded. Type: {type(model)}")
 
-        # Check if the model was loaded successfully
         if model is None:
             print("Model could not be loaded. Exiting.")
             sys.exit(1)
@@ -146,9 +148,4 @@ def main():
         predictions = model.predict(preprocessed_data)
         print(f"Predictions: {predictions}")
 
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        sys.exit(1)
-
-if __name__ == "__main__":
-    main()
+   
