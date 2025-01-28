@@ -65,6 +65,9 @@ def preprocess_transactions(df):
     X = final_df.drop(['TransactionId', 'CustomerId', 'TransactionStartTime'], axis=1)
     return X
 
+import os
+import pickle
+
 def load_model():
     """
     Loads the trained model from a local file.
@@ -74,25 +77,38 @@ def load_model():
     """
     try:
         # Get the directory of the current script
-        current_dir = os.path.dirname(__file__)
+        current_dir = os.path.dirname(os.path.abspath(__file__))
         
         # Construct the correct path to the model file
-        model_path = os.path.join(current_dir, 'model/best_model.pkl')
+        model_path = os.path.join(current_dir, 'model', 'best_model.pkl')
+        
+        # Ensure the file exists
+        if not os.path.exists(model_path):
+            raise FileNotFoundError(f"Model file not found at path: {model_path}")
         
         # Load the model using pickle
         with open(model_path, 'rb') as f:
             model = pickle.load(f)
         
+        # Ensure the loaded object is a valid model
+        if not hasattr(model, 'predict'):
+            raise ValueError("The loaded object is not a valid model with a 'predict' method.")
+        
         print("Model loaded successfully.")
         return model
 
-    except FileNotFoundError:
-        print("Error: Model file not found.")
+    except FileNotFoundError as fnf_error:
+        print(f"Error: {fnf_error}")
+        return None
+
+    except ValueError as val_error:
+        print(f"Error: {val_error}")
         return None
 
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        print(f"An unexpected error occurred while loading the model: {e}")
         return None
+
 
 def main():
     # Example input CSV file (replace with your actual data source)
