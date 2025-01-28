@@ -1,81 +1,123 @@
-# Data Analysis Report on Credit Transactions
-
+# README for Exploratory Data Analysis and Feature Engineering Project
 ## Overview
-This project provides a comprehensive analysis of credit transaction data. The primary objective is to explore the dataset, assess data quality, and prepare the data for further analysis, identifying trends, patterns, and anomalies within the data.
-
+This project focuses on performing Exploratory Data Analysis (EDA) and Feature Engineering on a dataset, with the ultimate goal of building a predictive model for credit scoring. The analysis includes understanding the dataset's structure, identifying patterns, and preparing features for modeling.
 ## Table of Contents
-- [Introduction](#introduction)
-- [Data Overview](#data-overview)
-- [Data Quality Assessment](#data-quality-assessment)
-- [Summary Statistics](#summary-statistics)
-- [Exploratory Data Analysis](#exploratory-data-analysis)
-- [Data Cleaning Process](#data-cleaning-process)
-- [Conclusion](#conclusion)
-- [Future Work](#future-work)
-- [Installation](#installation)
-- [Usage](#usage)
-- [License](#license)
-
-## Introduction
-This report analyzes credit transaction data obtained from [source]. It aims to understand the dataset's structure and integrity while preparing it for further analysis.
-
-## Data Overview
-The dataset consists of 95,662 entries and 18 columns, containing various attributes of credit transactions.
-
-### Key Attributes
-- **TransactionId**: Unique identifier for each transaction.
-- **AccountId**: Identifier for the customer’s account.
-- **Amount**: The monetary value associated with each transaction.
-- **FraudResult**: Indicates whether a transaction is fraudulent (1) or not (0).
-
-## Data Quality Assessment
-### Missing Values
-Certain columns contain missing values, including:
-- AccountId: 2 missing values
-- CountryCode: 2 missing values
-- ProviderId: 2 missing values
-- Value: 3 missing values
-- TransactionStartTime: 1 missing value
-- PricingStrategy: 3 missing values
-- Unnamed Columns: Significant missing data
-
-### Duplicates
-Duplicates were identified and removed, ensuring data integrity.
-
-## Summary Statistics
-Summary statistics provide insight into the distribution of numerical features, such as:
-- **Amount**: Mean: $6,718.07, Min: -$1,000,000.00, Max: $9,880,000.00
-- **Value**: Mean: $9,900.64, Min: $2.00, Max: $9,880,000.00
-
-## Exploratory Data Analysis
+1. [Project Structure](#Project-Structure)
+2. [Exploratory Data Analysis (EDA)](#Exploratory-Data-Analysis-EDA)
++ [Overview of the Data](#Overview-of-the-Data)
++ [Summary Statistics](#Summary-Statistics)
++ [Distribution of Numerical Features](#Distribution-of-Numerical-Features)
++ [Distribution of Categorical Features](#Distribution-of-Categorical-Features)
++ [Correlation Analysis](#Correlation-Analysis)
++ [Identifying Missing Values](#Identifying-Missing-Values)
++ [Outlier Detection](#Outlier-Detection)
+3. [Feature Engineering](#Feature-Engineering)
++ [Create Aggregate Features](#Create-Aggregate-Features)
++ [Extract Features](#Extract-Features)
++ [Encode Categorical Variables](#Encode-Categorical-Variables)
++ [Handle Missing Values](Handle-Missing-Values)
++ [Normalize/Standardize Numerical Features](#Normalize/Standardize-Numerical-Features)
+4. [Modeling](#Modeling)
++ [Model Selection and Training](#Model-Selection-and-Training)
++ [Model Evalution](#Model-Evalution)
+[Conclusion](#Conclusion)
+## Project Structure
+```|   .gitignore
+|   README.md
+|   requirements.txt
+|   
++---.github
+|   \---workflows
++---.vscode
+|       settings
+|       
++---data
++---notebooks
+|       __init__.py
+|      credit_score_analysis_notebook.ipynb
+|      eda_analysis_notebook.ipynb  
++---scripts
+|       __init__.py
+|       load_data.py
+|       feature_engg.py
+|       custom_logger.py
+|       credit_scoring_model.py
+|       credit_eda_visualize.py
+|       credit_eda_analysis.py
++---src
+|       __init__.py
+|       
+\---tests
+```
+## Exploratory Data Analysis (EDA)
+### Overview of the Data
+Understand the structure of the dataset, including:
+Number of rows
+Number of columns
+Data types for each feature
+### Summary Statistics
+Calculate central tendency measures (mean, median) and dispersion metrics (standard deviation, variance).
+Analyze the shape of the dataset’s distribution.
 ### Distribution of Numerical Features
-Histograms and KDE plots reveal a right-skewed distribution for the Amount feature.
-
+Visualize distributions using histograms or density plots to identify patterns, skewness, and potential outliers.
 ### Distribution of Categorical Features
-A count plot shows that only a small percentage of transactions are fraudulent (approximately 0.2%).
-
+Analyze frequency counts and variability within categorical features using bar plots or pie charts.
 ### Correlation Analysis
-Weak correlations among numerical features were observed, with no significant predictors of fraud identified.
-
-## Data Cleaning Process
-### Handling Missing Values
-Missing numeric values were filled with the median. Rows with missing categorical values were removed.
-
-### Removing Duplicates
-Duplicates were removed, resulting in a final dataset of 54,942 entries.
-
-### Outlier Treatment
-Outliers were removed based on the 1.5 * IQR rule.
-
+Assess relationships between numerical features using correlation matrices and heatmaps.
+### Identifying Missing Values
+Identify missing values in the dataset to determine their impact and decide on appropriate imputation strategies.
+### Outlier Detection
+Use box plots to visually identify outliers in numerical features.
+## Feature Engineering
+### Create Aggregate Features
+Examples:
+Total Transaction Amount: Sum of all transaction amounts for each customer.
+Average Transaction Amount: Average transaction amount per customer.
+Transaction Count: Number of transactions per customer.
+Standard Deviation of Transaction Amounts: Variability of transaction amounts per customer.
+### Extract Features
+Examples:
+Transaction Hour: Hour when the transaction occurred.
+Transaction Day: Day of the month when the transaction occurred.
+Transaction Month: Month when the transaction occurred.
+Transaction Year: Year when the transaction occurred.
+### Encode Categorical Variables
+Convert categorical variables into numerical format using:
+One-Hot Encoding: Converts categorical values into binary vectors.
+Label Encoding: Assigns a unique integer to each category.
+### Handle Missing Values
+Options include:
+Imputation: Filling missing values with mean, median, mode, or advanced methods like KNN imputation.
+Removal: Removing rows or columns with few missing values.
+### Normalize/Standardize Numerical Features
+Scaling techniques include:
+Normalization: Scales data to a range of [0, 1].
+Standardization: Scales data to have a mean of 0 and a standard deviation of 1.
+Feature Engineering libraries used:
+xverse
+woe
+## Modeling
+### Model Selection and Training
+Split the Data
+Divide the dataset into training and testing sets to evaluate model performance on unseen data.
+Choose Models
+Select at least two models from:
+Logistic Regression
+Decision Trees
+Random Forest
+Gradient Boosting Machines (GBM)
+Train the Models
+Train selected models on the training dataset.
+Hyperparameter Tuning
+Enhance model performance through hyperparameter tuning using techniques like:
+Grid Search
+Random Search
+### Model Evaluation
+Assess model performance using metrics such as:
+Accuracy: Ratio of correctly predicted observations to total observations.
+Precision: Ratio of correctly predicted positive observations to total predicted positives.
+Recall (Sensitivity): Ratio of correctly predicted positive observations to all actual positives.
+F1 Score: Weighted average of Precision and Recall.
+ROC-AUC: Area Under the Receiver Operating Characteristic Curve, measuring model's ability to distinguish between classes.
 ## Conclusion
-The data cleaning process resulted in a refined dataset of 54,942 entries, ready for further exploration or predictive modeling.
-
-## Future Work
-Further analysis could involve:
-- Predictive modeling to identify potential fraudulent transactions.
-- Time-series analysis to observe trends over time.
-
-## Installation
-To run this project, ensure you have the following libraries installed:
-```bash
-pip install pandas matplotlib seaborn python-docx
+This README provides a comprehensive overview of the EDA and feature engineering processes applied in this project. By following these structured tasks, you can gain insights from your dataset and prepare it for effective modeling.
