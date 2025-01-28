@@ -65,9 +65,6 @@ def preprocess_transactions(df):
     X = final_df.drop(['TransactionId', 'CustomerId', 'TransactionStartTime'], axis=1)
     return X
 
-import os
-import pickle
-
 def load_model():
     """
     Loads the trained model from a local file.
@@ -155,4 +152,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
