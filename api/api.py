@@ -25,6 +25,10 @@ class InputData(BaseModel):
 
 app = FastAPI()
 model = load_model()
+# Define the root endpoint
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the Credit Scoring API"}
 
 @app.post("/predict")
 async def predict(input_data: InputData):
