@@ -48,5 +48,9 @@ async def predict(input_data: InputData):
          raise http_exc
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Run the application
 if __name__ == "__main__":
     pass
+    uvicorn.run("api:app", host="127.0.0.1", port=8000, reload=True)
+

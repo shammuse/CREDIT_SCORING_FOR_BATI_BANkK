@@ -1,10 +1,11 @@
 import pandas as pd
 import sys, os
 from sklearn.preprocessing import MinMaxScaler, LabelEncoder, KBinsDiscretizer
+import pickle
 
 def preprocess_transactions(df):
     """Preprocesses transaction data for model input."""
-
+    
     # Aggregate features
     aggregate_features = df.groupby('CustomerId').agg(
         Total_Transaction_Amount=('Amount', 'sum'),
@@ -14,7 +15,7 @@ def preprocess_transactions(df):
 
     # Convert 'TransactionStartTime' to datetime, handle missing values
     df['TransactionStartTime'] = pd.to_datetime(df['TransactionStartTime'], errors='coerce')
-    df['TransactionStartTime'] = df['TransactionStartTime'].dt.tz_localize(None) # Make datetime timezone-naive
+    df['TransactionStartTime'] = df['TransactionStartTime'].dt.tz_localize(None)  # Make datetime timezone-naive
 
     # Extract features
     df['Transaction_Hour'] = df['TransactionStartTime'].dt.hour
@@ -29,7 +30,7 @@ def preprocess_transactions(df):
     label_columns = ['PricingStrategy']
     label_encoder = LabelEncoder()
     for col in label_columns:
-         final_df[col] = label_encoder.fit_transform(final_df[col].astype(str))
+        final_df[col] = label_encoder.fit_transform(final_df[col].astype(str))
 
     # Numerical columns for scaling
     numerical_columns = final_df.select_dtypes(include=['float64', 'int64']).columns
@@ -64,44 +65,74 @@ def preprocess_transactions(df):
     X = final_df.drop(['TransactionId', 'CustomerId', 'TransactionStartTime'], axis=1)
     return X
 
-#import gdown
-import pickle
-#import os
-#
-#def download_file_from_google_drive(file_id, destination):
-#    """
-#    Downloads a file from Google Drive using gdown.
-#
-#    Args:
-#        file_id (str): The Google Drive file ID.
-#        destination (str): The local file path where the downloaded file will be saved.
-#    """
-#    url = f"https://drive.google.com/uc?id={file_id}"
-#    
-#    # Use gdown to download the file from Google Drive
-#    gdown.download(url, destination, quiet=False)
-
-
 def load_model():
     """
-    Checks if the model file exists locally. If not, downloads it from Google Drive.
+    Loads the trained model from a local file.
 
     Returns:
-        The loaded model object.
+        The loaded model object, or None if an error occurs.
     """
-    # Get the directory of the current script
-    current_dir = os.path.dirname(__file__)
-    
-    # Construct the correct path to the model file
-    model_path = os.path.join(current_dir, 'model/best_model.pkl')
-    
-    # If the model doesn't exist locally, download it
-    #if not os.path.exists(model_path):
-    #    file_id = '1A2B3C4D5EF6GHIJKL'  # Replace with your actual file ID from Google Drive
-    #    download_file_from_google_drive(file_id, model_path)
+    try:
+        # Get the directory of the current script
+        current_dir = os.path.dirname(__file__)
+        
+        # Construct the correct path to the model file
+        model_path = os.path.join(current_dir, 'model/best_model.pkl')
+        
+        # Load the model using pickle
+        with open(model_path, 'rb') as f:
+            model = pickle.load(f)
+        
+        print("Model loaded successfully.")
+        return model
 
-    # Load the model using pickle
-    with open(model_path, 'rb') as f:
-        model = pickle.load(f)
-    
-    return model
+    except FileNotFoundError:
+        print("Error: Model file not found.")
+        return None
+
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+        return None
+
+def main():
+    # Example input CSV file (replace with your actual data source)
+    input_csv = "../data/data.csv"  # Replace with the path to your CSV file
+    output_csv = "../data/preprocessed_data.csv"  # File to save preprocessed data
+
+    try:
+        # Load transaction data
+        print("Loading transaction data...")
+        df = pd.read_csv(input_csv)
+        print("Transaction data loaded successfully.")
+
+        # Preprocess the data
+        print("Preprocessing transactions...")
+        preprocessed_data = preprocess_transactions(df)
+        print("Preprocessing complete.")
+
+        # Save preprocessed data to CSV
+        preprocessed_data.to_csv(output_csv, index=False)
+        print(f"Preprocessed data saved to {output_csv}.")
+
+        # Load the model
+        print("Loading model...")
+        model = load_model()
+        print(f"Model loaded. Type: {type(model)}")
+
+        # Check if the model was loaded successfully
+        if model is None:
+            print("Model could not be loaded. Exiting.")
+            sys.exit(1)
+
+        # Make predictions
+        print("Making predictions...")
+        predictions = model.predict(preprocessed_data)
+        print(f"Predictions: {predictions}")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
+
