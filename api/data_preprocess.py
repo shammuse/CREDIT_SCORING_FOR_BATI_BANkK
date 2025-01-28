@@ -111,6 +111,8 @@ def load_model():
 
 
 def main():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    model_path = os.path.join(current_dir, 'model', 'best_model.pkl')
     # Example input CSV file (replace with your actual data source)
     input_csv = "../data/data.csv"  # Replace with the path to your CSV file
     output_csv = "../data/preprocessed_data.csv"  # File to save preprocessed data
@@ -132,6 +134,8 @@ def main():
 
         # Load the model
         print("Loading model...")
+        print(f"Model path: {model_path}")
+
         model = load_model()
         print(f"Model loaded. Type: {type(model)}")
 
